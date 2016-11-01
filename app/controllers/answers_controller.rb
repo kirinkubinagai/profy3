@@ -1,15 +1,18 @@
 class AnswersController < ApplicationController
 
-before_action :redirect,only: :new
+  before_action :redirect, only: :new
 
   def new
     @question = Question.find(params[:question_id])
     @answer = Answer.new
     @answer.question_id = @question.id
+    if @question.answers.exists?(user_id: current_user.id)
+      redirect_to :root
+    end
   end
 
   def create
-    @answer=Answer.create(create_params)
+    @answer = Answer.create(create_params)
   end
 
   def edit
@@ -23,9 +26,9 @@ before_action :redirect,only: :new
     @answer.update(update_params)
   end
 
-  private
+private
   def create_params
-    params.require(:answer).permit(:text,:question_id).merge(user_id: current_user.id)
+    params.require(:answer).permit(:text, :question_id).merge(user_id: current_user.id)
   end
 
   def redirect
@@ -37,5 +40,4 @@ before_action :redirect,only: :new
   def update_params
     params.require(:answer).permit(:text)
   end
-  
 end

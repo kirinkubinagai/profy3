@@ -18,5 +18,6 @@
   <% end %>
 </div>
 
-<%= render partial: "questions/question", collection: @questions %>
+  <%= render @feed_contents_resources %>
+  <%=paginate @feed_contents%>
 <% end %>
